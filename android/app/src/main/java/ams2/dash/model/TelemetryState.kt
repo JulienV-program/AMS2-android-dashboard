@@ -63,7 +63,16 @@ class TelemetryState {
     private var fuelHistoryCount = 0
     private var lapStartFuel = -1f
 
+    // Dernier paquet reçu au format "Project CARS 1" (mauvais réglage dans AMS2)
+    var lastLegacyPacketMs = 0L
+
     fun hasData(nowMs: Long) = lastPacketMs != 0L && nowMs - lastPacketMs < STALE_MS
+
+    fun legacyProtocol(nowMs: Long) = lastLegacyPacketMs != 0L && nowMs - lastLegacyPacketMs < STALE_MS
+
+    fun onLegacyProtocol() {
+        lastLegacyPacketMs = SystemClock.elapsedRealtime()
+    }
 
     fun onTelemetry() {
         val now = SystemClock.elapsedRealtime()

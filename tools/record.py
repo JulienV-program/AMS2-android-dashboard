@@ -11,7 +11,7 @@ import socket
 import sys
 import time
 
-from ams2udp import PORT, REC_HEADER, REC_MAGIC, TYPE_NAMES
+from ams2udp import PC1_SIZES, PORT, REC_HEADER, REC_MAGIC, TYPE_NAMES
 
 
 def stop(*_):
@@ -46,18 +46,22 @@ def main():
                 if data:
                     f.write(REC_HEADER.pack(now - start, len(data)))
                     f.write(data)
-                    if len(data) >= 12:
+                    if len(data) in PC1_SIZES:
+                        ptype = "PC1 (mauvais protocole)"
+                        counts[ptype] += 1
+                        sizes[ptype] = (len(data), 0)
+                    elif len(data) >= 12:
                         ptype = data[10]
                         counts[ptype] += 1
                         sizes[ptype] = (len(data), data[11])
                 if now - last_print >= 2:
                     last_print = now
-                    summary = "  ".join(f"{TYPE_NAMES.get(t, t)}={n}" for t, n in sorted(counts.items()))
+                    summary = "  ".join(f"{TYPE_NAMES.get(t, t)}={n}" for t, n in sorted(counts.items(), key=str))
                     print(f"\r{now - start:6.0f} s  {summary or 'aucun paquet'}", end="", flush=True)
         except KeyboardInterrupt:
             pass
     print("\n\nType de paquet : nombre (taille, version)")
-    for t, n in sorted(counts.items()):
+    for t, n in sorted(counts.items(), key=str):
         size, version = sizes[t]
         print(f"  {TYPE_NAMES.get(t, t):26} {n:7}  ({size} octets, v{version})")
 

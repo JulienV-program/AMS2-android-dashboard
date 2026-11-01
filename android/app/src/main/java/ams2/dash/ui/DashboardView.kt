@@ -34,7 +34,8 @@ class DashboardView(context: Context, private val state: TelemetryState) : View(
         c.translate((width - W * scale) / 2f, (height - H * scale) / 2f)
         c.scale(scale, scale)
         synchronized(state) {
-            if (state.hasData(SystemClock.elapsedRealtime())) drawDash(c, state) else drawWaiting(c)
+            val now = SystemClock.elapsedRealtime()
+            if (state.hasData(now)) drawDash(c, state) else drawWaiting(c, state.legacyProtocol(now))
         }
         c.restore()
     }
@@ -228,7 +229,13 @@ class DashboardView(context: Context, private val state: TelemetryState) : View(
 
     // ---- Écran d'attente ---------------------------------------------------------------------
 
-    private fun drawWaiting(c: Canvas) {
+    private fun drawWaiting(c: Canvas, legacyProtocol: Boolean) {
+        if (legacyProtocol) {
+            draw(c, "AMS2 envoie le protocole « Project CARS 1 »", 640f, 340f, 48f, RED, Paint.Align.CENTER)
+            draw(c, "AMS2 › Options › Système › UDP Protocol Version : choisir « Project CARS 2 »",
+                640f, 410f, 28f, FG, Paint.Align.CENTER)
+            return
+        }
         draw(c, "En attente des données AMS2…", 640f, 340f, 56f, FG, Paint.Align.CENTER)
         draw(c, "Écoute UDP sur ${ipText.ifEmpty { "?" }} : port 5606", 640f, 410f, 32f, DIM, Paint.Align.CENTER)
         draw(c, "AMS2 › Options › Système : protocole UDP « Project CARS 2 », fréquence UDP activée",

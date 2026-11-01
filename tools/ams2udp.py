@@ -7,6 +7,9 @@ TELEMETRY, RACE, PARTICIPANTS, TIMINGS, GAME_STATE, TIME_STATS = 0, 1, 2, 3, 4, 
 TYPE_NAMES = {0: "telemetry", 1: "race", 2: "participants", 3: "timings", 4: "game_state",
               5: "weather", 6: "vehicle_names", 7: "time_stats", 8: "participant_vehicle_names"}
 
+# Tailles des paquets du protocole "Project CARS 1" (réglage UDP à changer dans AMS2)
+PC1_SIZES = (1367, 1347, 1028)
+
 # Fichier d'enregistrement : MAGIC puis une suite de (horodatage f64, longueur u16, données)
 REC_MAGIC = b"AMS2REC1"
 REC_HEADER = struct.Struct("<dH")

@@ -25,7 +25,14 @@ object Packets {
     private const val MAX_PARTICIPANTS = 32
     private const val PARTICIPANT_SIZE = 32
 
+    // Tailles des paquets du protocole "Project CARS 1", que l'on ne décode pas
+    private val LEGACY_SIZES = intArrayOf(1367, 1347, 1028)
+
     fun parse(b: ByteBuffer, len: Int, s: TelemetryState) {
+        if (len in LEGACY_SIZES) {
+            s.onLegacyProtocol()
+            return
+        }
         if (len < 12) return
         when (u8(b, 10)) {
             TYPE_TELEMETRY -> if (len >= SIZE_TELEMETRY) telemetry(b, s)
