@@ -45,3 +45,7 @@ android/app/src/main/java/ams2/dash/
   ui/DashboardView       rendu Canvas en repère virtuel 1280×800
   MainActivity           plein écran, écran toujours allumé, verrous Wi-Fi
 ```
+
+`docs/SMS_UDP_Definitions.hpp`, la définition officielle du protocole UDP Project CARS 2 publiée par
+Slightly Mad Studios, sert de référence pour les offsets mais n'est pas versionnée (ce n'est pas notre code) :
+la récupérer auprès de SMS / des forums Project CARS 2 et la placer dans `docs/` pour la consulter.

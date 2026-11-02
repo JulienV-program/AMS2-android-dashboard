@@ -6,3 +6,6 @@ local.properties
 .DS_Store
 *.ams2rec
 __pycache__/
+
+# Définition du protocole UDP publiée par Slightly Mad Studios : gardée en local, pas redistribuée
+docs/SMS_UDP_Definitions.hpp
